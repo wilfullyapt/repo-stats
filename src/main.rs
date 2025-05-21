@@ -28,8 +28,8 @@ struct Args {
 
 fn main() {
     let args = Args::parse();
-    let project_dir = Path::new(&args.project_dir);
-    let src_dir = project_dir.join("src");
+    let src_dir = Path::new(&args.project_dir);
+//  let src_dir = project_dir.join("src");
 
     if !src_dir.is_dir() {
         eprintln!("{}", "Error: 'src' directory not found in the specified path".red());
