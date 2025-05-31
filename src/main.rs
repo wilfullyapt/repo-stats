@@ -1,4 +1,5 @@
 mod analyzer;
+mod cache;
 mod stats;
 mod utils;
 
@@ -57,6 +58,13 @@ fn main() {
                 Language::Cpp => "cpp",
             };
 
+            let lang_str = match language {
+                Language::Python => "python",
+                Language::Rust => "rust",
+                Language::C => "c",
+                Language::Cpp => "cpp",
+            };
+
             let files = utils::get_files_with_extension(src_dir, extension);
 
             if files.is_empty() {
@@ -77,7 +85,9 @@ fn main() {
                 analyzer::analyze_file(&path, &language, &mut stats);
             }
 
-            stats::print_stats(&stats, &language);
+            let prev_stats = cache::load_cache(src_dir, lang_str);
+            cache::save_cache(src_dir, lang_str, &stats);
+            stats::print_stats(&stats, &prev_stats, &language);
         }
         Command::Install => install(),
         Command::Uninstall => uninstall(),
